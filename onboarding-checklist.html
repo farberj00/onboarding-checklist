@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Onboarding Checklist</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+        
+        .checklist-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 20px 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4285f4;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.2em;
+        }
+        
+        .employee-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4285f4;
+        }
+        
+        .employee-info input {
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            width: 200px;
+        }
+        
+        .employee-info input:focus {
+            outline: none;
+            border-bottom: 2px solid #4285f4;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4285f4, #34a853);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .checklist-item {
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .checklist-item:hover {
+            border-color: #4285f4;
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.1);
+        }
+        
+        .checklist-item.completed {
+            border-color: #34a853;
+            background: #f8fff8;
+        }
+        
+        .item-header {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            margin-right: 15px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .checkbox.checked {
+            background: #34a853;
+            border-color: #34a853;
+            color: white;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+            flex: 1;
+        }
+        
+        .item-title.completed {
+            text-decoration: line-through;
+            color: #666;
+        }
+        
+        .sub-items {
+            margin-left: 35px;
+            margin-top: 10px;
+        }
+        
+        .sub-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 8px 0;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .sub-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-radius: 3px;
+            margin-right: 10px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .sub-checkbox.checked {
+            background: #4285f4;
+            border-color: #4285f4;
+            color: white;
+        }
+        
+        .sub-item-text {
+            color: #555;
+            font-size: 14px;
+            flex: 1;
+        }
+        
+        .sub-item-text.completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .completion-banner {
+            background: linear-gradient(135deg, #ffd700, #ffb300);
+            color: #333;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+            animation: celebration 0.6s ease-in-out;
+        }
+        
+        @keyframes celebration {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .completion-banner h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        
+        .action-buttons {
+            margin-top: 25px;
+            text-align: center;
+        }
+        
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #3367d6;
+        }
+        
+        .btn.secondary {
+            background: #6c757d;
+        }
+        
+        .btn.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .completion-stats {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            display: inline-block;
+            margin: 0 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4285f4;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="checklist-container">
+        <div class="header">
+            <h1>Employee Onboarding Checklist</h1>
+            <p>Complete these tasks to finish your onboarding process</p>
+        </div>
+        
+        <div class="employee-info">
+            <strong>Employee Name:</strong> 
+            <input type="text" id="employeeName" placeholder="Enter your name" onchange="saveProgress()">
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill">
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+        </div>
+        
+        <div class="completion-stats">
+            <div class="stat-item">
+                <span class="stat-number" id="completedCount">0</span>
+                <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="totalCount">0</span>
+                <span class="stat-label">Total Tasks</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="remainingCount">0</span>
+                <span class="stat-label">Remaining</span>
+            </div>
+        </div>
+        
+        <div class="completion-banner" id="completionBanner">
+            <h2>Congratulations! 🎉</h2>
+            <p><span id="congratsName"></span>You have completed all onboarding tasks!</p>
+            <p>Welcome to the Walks Wiggles and Wags team!</p>
+        </div>
+        
+        <!-- Checklist Items -->
+        <div class="checklist-item" data-id="adp">
+            <div class="item-header" onclick="toggleMainItem('adp')">
+                <div class="checkbox" id="checkbox-adp">✓</div>
+                <div class="item-title" id="title-adp">Set up ADP Payroll account</div>
+            </div>
+            <div class="sub-items">
+                <div class="sub-item" onclick="toggleSubItem('adp', 'paperwork')">
+                    <div class="sub-checkbox" id="sub-adp-paperwork">✓</div>
+                    <div class="sub-item-text" id="subtext-adp-paperwork">Complete onboarding paperwork (W4, I-9)</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('adp', 'app')">
+                    <div class="sub-checkbox" id="sub-adp-app">✓</div>
+                    <div class="sub-item-text" id="subtext-adp-app">Download the ADP Run app & sign up for paperless W-2 delivery</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="checklist-item" data-id="download-ttp">
+            <div class="item-header" onclick="toggleMainItem('download-ttp')">
+                <div class="checkbox" id="checkbox-download-ttp">✓</div>
+                <div class="item-title" id="title-download-ttp">Download Time To Pet app</div>
+            </div>
+        </div>
+        
+        <div class="checklist-item" data-id="login-ttp">
+            <div class="item-header" onclick="toggleMainItem('login-ttp')">
+                <div class="checkbox" id="checkbox-login-ttp">✓</div>
+                <div class="item-title" id="title-login-ttp">Log into Time To Pet app</div>
+            </div>
+            <div class="sub-items">
+                <div class="sub-item" onclick="toggleSubItem('login-ttp', 'photo')">
+                    <div class="sub-checkbox" id="sub-login-ttp-photo">✓</div>
+                    <div class="sub-item-text" id="subtext-login-ttp-photo">Upload photo & bio</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('login-ttp', 'vacation')">
+                    <div class="sub-checkbox" id="sub-login-ttp-vacation">✓</div>
+                    <div class="sub-item-text" id="subtext-login-ttp-vacation">Add any previously planned vacations and days off</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('login-ttp', 'schedule')">
+                    <div class="sub-checkbox" id="sub-login-ttp-schedule">✓</div>
+                    <div class="sub-item-text" id="subtext-login-ttp-schedule">Set your weekly schedule</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="checklist-item" data-id="mission">
+            <div class="item-header" onclick="toggleMainItem('mission')">
+                <div class="checkbox" id="checkbox-mission">✓</div>
+                <div class="item-title" id="title-mission">Review Mission, Vision, Company Culture</div>
+            </div>
+        </div>
+        
+        <div class="checklist-item" data-id="policies">
+            <div class="item-header" onclick="toggleMainItem('policies')">
+                <div class="checkbox" id="checkbox-policies">✓</div>
+                <div class="item-title" id="title-policies">Review Core Company Policies</div>
+            </div>
+            <div class="sub-items">
+                <div class="sub-item" onclick="toggleSubItem('policies', 'attendance')">
+                    <div class="sub-checkbox" id="sub-policies-attendance">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-attendance">Attendance & Punctuality Policy</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('policies', 'timeoff')">
+                    <div class="sub-checkbox" id="sub-policies-timeoff">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-timeoff">Time Off & Schedule Change Request Policy</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('policies', 'confidentiality')">
+                    <div class="sub-checkbox" id="sub-policies-confidentiality">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-confidentiality">Confidentiality & Privacy Policy</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('policies', 'boundaries')">
+                    <div class="sub-checkbox" id="sub-policies-boundaries">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-boundaries">Professional Boundaries Policy</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('policies', 'social')">
+                    <div class="sub-checkbox" id="sub-policies-social">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-social">Social Media Use Policy</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('policies', 'substance')">
+                    <div class="sub-checkbox" id="sub-policies-substance">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-substance">Substance-Free Workplace Policy</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('policies', 'dress')">
+                    <div class="sub-checkbox" id="sub-policies-dress">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-dress">Dress Code Policy</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('policies', 'disciplinary')">
+                    <div class="sub-checkbox" id="sub-policies-disciplinary">✓</div>
+                    <div class="sub-item-text" id="subtext-policies-disciplinary">Disciplinary Policy (warnings, termination grounds)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="checklist-item" data-id="video">
+            <div class="item-header" onclick="toggleMainItem('video')">
+                <div class="checkbox" id="checkbox-video">✓</div>
+                <div class="item-title" id="title-video">Watch video: Entering a Client's Home Securely</div>
+            </div>
+        </div>
+        
+        <div class="checklist-item" data-id="cpr">
+            <div class="item-header" onclick="toggleMainItem('cpr')">
+                <div class="checkbox" id="checkbox-cpr">✓</div>
+                <div class="item-title" id="title-cpr">Complete ProPetHero CPR & First Aid Training</div>
+            </div>
+            <div class="sub-items">
+                <div class="sub-item" onclick="toggleSubItem('cpr', 'course')">
+                    <div class="sub-checkbox" id="sub-cpr-course">✓</div>
+                    <div class="sub-item-text" id="subtext-cpr-course">Complete mandatory course through ProTrainings: ProPetHero – CPR & First Aid ($49.95, ~1.5 hours)</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('cpr', 'track')">
+                    <div class="sub-checkbox" id="sub-cpr-track">✓</div>
+                    <div class="sub-item-text" id="subtext-cpr-track">Track your hours through Time To Pet (label it CPR Training)</div>
+                </div>
+                <div class="sub-item" onclick="toggleSubItem('cpr', 'certificate')">
+                    <div class="sub-checkbox" id="sub-cpr-certificate">✓</div>
+                    <div class="sub-item-text" id="subtext-cpr-certificate">Send certificate of completion for reimbursement through next payroll</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="checklist-item" data-id="uniform">
+            <div class="item-header" onclick="toggleMainItem('uniform')">
+                <div class="checkbox" id="checkbox-uniform">✓</div>
+                <div class="item-title" id="title-uniform">Sign acknowledgment for uniform & safety equipment issued</div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn" onclick="saveProgress()">Save Progress</button>
+            <button class="btn secondary" onclick="resetChecklist()">Reset All</button>
+            <button class="btn secondary" onclick="printChecklist()">Print Checklist</button>
+        </div>
+    </div>
+    
+    <script>
+        let checklistData = {
+            mainItems: {},
+            subItems: {},
+            employeeName: ''
+        };
+        
+        let totalTasks = 0;
+        
+        function initializeChecklist() {
+            // Count total tasks
+            const mainItems = document.querySelectorAll('.checklist-item');
+            const subItems = document.querySelectorAll('.sub-item');
+            totalTasks = mainItems.length + subItems.length;
+            
+            // Load saved progress
+            loadProgress();
+            
+            // Update display
+            updateProgress();
+            updateStats();
+            
+            // Clear all checkboxes initially
+            clearAllCheckboxes();
+        }
+        
+        function clearAllCheckboxes() {
+            // Clear main item checkboxes
+            document.querySelectorAll('.checkbox').forEach(checkbox => {
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+            });
+            
+            // Clear sub item checkboxes
+            document.querySelectorAll('.sub-checkbox').forEach(checkbox => {
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+            });
+            
+            // Clear completed styling
+            document.querySelectorAll('.checklist-item').forEach(item => {
+                item.classList.remove('completed');
+            });
+            
+            document.querySelectorAll('.item-title, .sub-item-text').forEach(text => {
+                text.classList.remove('completed');
+            });
+        }
+        
+        function toggleMainItem(itemId) {
+            checklistData.mainItems[itemId] = !checklistData.mainItems[itemId];
+            updateItemDisplay(itemId);
+            updateProgress();
+            updateStats();
+            checkCompletion();
+            saveProgress();
+        }
+        
+        function toggleSubItem(parentId, subId) {
+            const fullId = `${parentId}-${subId}`;
+            checklistData.subItems[fullId] = !checklistData.subItems[fullId];
+            updateSubItemDisplay(parentId, subId);
+            checkParentCompletion(parentId);
+            updateProgress();
+            updateStats();
+            checkCompletion();
+            saveProgress();
+        }
+        
+        function updateItemDisplay(itemId) {
+            const checkbox = document.getElementById(`checkbox-${itemId}`);
+            const title = document.getElementById(`title-${itemId}`);
+            const item = document.querySelector(`[data-id="${itemId}"]`);
+            
+            if (checklistData.mainItems[itemId]) {
+                checkbox.classList.add('checked');
+                checkbox.innerHTML = '✓';
+                title.classList.add('completed');
+                item.classList.add('completed');
+            } else {
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+                title.classList.remove('completed');
+                item.classList.remove('completed');
+            }
+        }
+        
+        function updateSubItemDisplay(parentId, subId) {
+            const fullId = `${parentId}-${subId}`;
+            const checkbox = document.getElementById(`sub-${fullId}`);
+            const text = document.getElementById(`subtext-${fullId}`);
+            
+            if (checklistData.subItems[fullId]) {
+                checkbox.classList.add('checked');
+                checkbox.innerHTML = '✓';
+                text.classList.add('completed');
+            } else {
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+                text.classList.remove('completed');
+            }
+        }
+        
+        function checkParentCompletion(parentId) {
+            const subItems = document.querySelectorAll(`[id^="sub-${parentId}-"]`);
+            let allCompleted = true;
+            
+            subItems.forEach(subItem => {
+                const subId = subItem.id.replace(`sub-${parentId}-`, '');
+                const fullId = `${parentId}-${subId}`;
+                if (!checklistData.subItems[fullId]) {
+                    allCompleted = false;
+                }
+            });
+            
+            if (subItems.length > 0) {
+                checklistData.mainItems[parentId] = allCompleted;
+                updateItemDisplay(parentId);
+            }
+        }
+        
+        function updateProgress() {
+            const completedMain = Object.values(checklistData.mainItems).filter(Boolean).length;
+            const completedSub = Object.values(checklistData.subItems).filter(Boolean).length;
+            const totalCompleted = completedMain + completedSub;
+            
+            const percentage = Math.round((totalCompleted / totalTasks) * 100);
+            
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressFill.style.width = percentage + '%';
+            progressText.textContent = percentage + '%';
+        }
+        
+        function updateStats() {
+            const completedMain = Object.values(checklistData.mainItems).filter(Boolean).length;
+            const completedSub = Object.values(checklistData.subItems).filter(Boolean).length;
+            const totalCompleted = completedMain + completedSub;
+            
+            document.getElementById('completedCount').textContent = totalCompleted;
+            document.getElementById('totalCount').textContent = totalTasks;
+            document.getElementById('remainingCount').textContent = totalTasks - totalCompleted;
+        }
+        
+        function checkCompletion() {
+            const completedMain = Object.values(checklistData.mainItems).filter(Boolean).length;
+            const completedSub = Object.values(checklistData.subItems).filter(Boolean).length;
+            const totalCompleted = completedMain + completedSub;
+            
+            const banner = document.getElementById('completionBanner');
+            const congratsName = document.getElementById('congratsName');
+            
+            if (totalCompleted === totalTasks) {
+                const name = checklistData.employeeName;
+                congratsName.textContent = name ? `${name}, ` : '';
+                banner.style.display = 'block';
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+        
+        function saveProgress() {
+            const employeeNameInput = document.getElementById('employeeName');
+            checklistData.employeeName = employeeNameInput.value;
+            
+            const progress = JSON.stringify(checklistData);
+            // In a real implementation, this would save to a backend
+            localStorage.setItem('onboarding_progress', progress);
+            console.log('Progress saved:', checklistData);
+        }
+        
+        function loadProgress() {
+            const saved = localStorage.getItem('onboarding_progress');
+            if (saved) {
+                checklistData = JSON.parse(saved);
+                
+                // Load employee name
+                document.getElementById('employeeName').value = checklistData.employeeName || '';
+                
+                // Update all displays
+                Object.keys(checklistData.mainItems).forEach(itemId => {
+                    if (checklistData.mainItems[itemId]) {
+                        updateItemDisplay(itemId);
+                    }
+                });
+                
+                Object.keys(checklistData.subItems).forEach(fullId => {
+                    if (checklistData.subItems[fullId]) {
+                        const parts = fullId.split('-');
+                        const parentId = parts[0];
+                        const subId = parts.slice(1).join('-');
+                        updateSubItemDisplay(parentId, subId);
+                    }
+                });
+            }
+        }
+        
+        function resetChecklist() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                checklistData = { mainItems: {}, subItems: {}, employeeName: '' };
+                document.getElementById('employeeName').value = '';
+                clearAllCheckboxes();
+                updateProgress();
+                updateStats();
+                document.getElementById('completionBanner').style.display = 'none';
+                localStorage.removeItem('onboarding_progress');
+            }
+        }
+        
+        function printChecklist() {
+            window.print();
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeChecklist);
+        
+        // Save progress when employee name changes
+        document.getElementById('employeeName').addEventListener('input', saveProgress);
+    </script>
+</body>
+</html>
